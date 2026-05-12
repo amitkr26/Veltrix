@@ -30,10 +30,10 @@ export function AuthForm({ type }: AuthFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, touchedFields },
   } = useForm<AuthFormData>({
     resolver: zodResolver(schema),
-    mode: "onBlur",
+    mode: "onSubmit",
   });
 
   const onSubmit = async (data: any) => {
@@ -79,11 +79,11 @@ export function AuthForm({ type }: AuthFormProps) {
                 placeholder="maker_name" 
                 className={cn(
                     "h-12 bg-white/5 border-white/10 rounded-xl",
-                    errors.username && "border-red-500/50 focus-visible:ring-red-500/20"
+                    errors.username && touchedFields.username && "border-red-500/50 focus-visible:ring-red-500/20"
                 )}
                 disabled={isSubmitting || isLocked}
               />
-              {errors.username && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.username.message as string}</p>}
+              {errors.username && touchedFields.username && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.username.message as string}</p>}
             </div>
           )}
           
@@ -95,11 +95,11 @@ export function AuthForm({ type }: AuthFormProps) {
               placeholder="name@ecosystem.com" 
               className={cn(
                 "h-12 bg-white/5 border-white/10 rounded-xl",
-                errors.email && "border-red-500/50 focus-visible:ring-red-500/20"
+                errors.email && touchedFields.email && "border-red-500/50 focus-visible:ring-red-500/20"
               )}
               disabled={isSubmitting || isLocked}
             />
-            {errors.email && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.email.message as string}</p>}
+            {errors.email && touchedFields.email && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.email.message as string}</p>}
           </div>
           
           <div className="space-y-2">
@@ -110,11 +110,11 @@ export function AuthForm({ type }: AuthFormProps) {
               placeholder="••••••••" 
               className={cn(
                 "h-12 bg-white/5 border-white/10 rounded-xl",
-                errors.password && "border-red-500/50 focus-visible:ring-red-500/20"
+                errors.password && touchedFields.password && "border-red-500/50 focus-visible:ring-red-500/20"
               )}
               disabled={isSubmitting || isLocked}
             />
-            {errors.password && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.password.message as string}</p>}
+            {errors.password && touchedFields.password && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.password.message as string}</p>}
           </div>
 
           {serverError && (

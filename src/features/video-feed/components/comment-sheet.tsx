@@ -18,9 +18,10 @@ export function CommentSheet({ videoId }: CommentSheetProps) {
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
 
-  const { data: comments, isLoading } = useQuery({
+  const { data: comments, isLoading, isError } = useQuery({
     queryKey: ["comments", videoId],
     queryFn: () => SocialService.getVideoComments(videoId),
+    retry: 1,
   });
 
   const mutation = useMutation({
@@ -74,11 +75,19 @@ export function CommentSheet({ videoId }: CommentSheetProps) {
            ))
         )}
 
-        {!isLoading && (!comments || comments.length === 0) && (
+        {!isLoading && !isError && (!comments || comments.length === 0) && (
            <div className="flex flex-col items-center justify-center py-20 text-center space-y-4 opacity-40">
               <MessageSquare className="w-8 h-8" />
               <p className="text-[10px] font-black uppercase tracking-widest">No Active Discussions</p>
            </div>
+        )}
+
+        {isError && (
+            <div className="flex flex-col items-center justify-center py-20 text-center space-y-4 text-destructive/60">
+               <X className="w-8 h-8" />
+               <p className="text-[10px] font-black uppercase tracking-widest">Connection Refused</p>
+               <p className="text-[9px] font-medium max-w-[200px]">Verify infrastructure scopes and regional endpoint accessibility.</p>
+            </div>
         )}
       </div>
 

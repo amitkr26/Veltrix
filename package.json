@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "setup:infra": "node scripts/setup-infra.js",
+    "setup:appwrite": "npm run setup:infra"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
@@ -20,6 +22,7 @@
     "lucide-react": "^1.14.0",
     "next": "16.2.6",
     "next-themes": "^0.4.6",
+    "node-appwrite": "^24.1.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.75.0",

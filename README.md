@@ -55,19 +55,18 @@ Run the integrated test suite:
 npm run test
 ```
 
-## 🚀 Deployment
-
-### Vercel (Frontend)
-1. Push this repository to GitHub.
-2. Connect the repository to Vercel.
-3. Configure all `NEXT_PUBLIC_APPWRITE_*` environment variables in the Vercel dashboard.
-4. Deploy.
-
 ### Appwrite (Backend)
-1. Create a new Project in Appwrite Cloud.
-2. Create the collections listed in `Infrastructure Setup`.
-3. Configure Permissions: `Any` (Read) for public feeds, `User` (Create/Update/Delete) for owned content.
-4. Set up a Storage Bucket named `media`.
+Veltrix features a fully automated infrastructure-as-code setup.
+
+1. **Create a Project**: Go to Appwrite Cloud and create a new project.
+2. **API Key**: Generate an API Key with `collections.write`, `attributes.write`, `indexes.write`, and `buckets.write` permissions.
+3. **Database**: Create a Database and note the ID.
+4. **Environment**: Ensure `.env.local` contains `APPWRITE_API_KEY` and `NEXT_PUBLIC_APPWRITE_DATABASE_ID`.
+5. **Run Automation**:
+   ```bash
+   npm run setup:infra
+   ```
+   *This will automatically provision all collections, attributes, indexes, and storage buckets.*
 
 ## 🛠️ Troubleshooting
 - **Hydration Errors**: Ensure that all browser-only APIs (like `window`) are wrapped in `useEffect` or used in `"use client"` components.

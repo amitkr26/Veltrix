@@ -88,9 +88,9 @@ export default function Home() {
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
                   {[1, 2, 3, 4, 5, 6, 7, 8].map(i => <VideoSkeleton key={i} />)}
                </div>
-            ) : (
+            ) : videos && videos.length > 0 ? (
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
-                  {videos?.map((video, index) => (
+                  {videos.map((video, index) => (
                     <div key={`${video.$id}-${activeFeed}`} className={cn(
                       "natural-rhythm transition-all duration-700",
                       index % 3 === 0 ? "md:scale-105" : "md:scale-100"
@@ -101,6 +101,13 @@ export default function Home() {
                       />
                     </div>
                   ))}
+               </div>
+            ) : (
+               <div className="flex flex-col items-center justify-center py-32 space-y-4 opacity-40">
+                  <div className="p-4 rounded-full bg-white/5 border border-white/10">
+                     <Hash className="w-8 h-8" />
+                  </div>
+                  <p className="text-[10px] font-black uppercase tracking-widest">No Technical Media Found</p>
                </div>
             )}
           </div>
