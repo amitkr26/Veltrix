@@ -9,12 +9,13 @@ const authRoutes = ['/login', '/signup'];
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // We check for a session cookie (Simulation for production readiness)
-  // In a real Appwrite SSR setup, this would check for 'a_session_<id>'
-  const hasSession = request.cookies.get('auth-storage'); // This matches our Zustand persist key in local storage if mirrored
+  // High-reliability session check for Next.js Middleware
+  const hasSession = request.cookies.get('veltrix_session');
 
   if (protectedRoutes.some(route => pathname.startsWith(route)) && !hasSession) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    const url = new URL('/login', request.url);
+    url.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(url);
   }
 
   if (authRoutes.some(route => pathname.startsWith(route)) && hasSession) {

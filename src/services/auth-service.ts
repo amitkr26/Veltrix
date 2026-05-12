@@ -6,6 +6,9 @@ import { User } from "@/types/domain";
 class AuthServiceImpl extends BaseApiService {
   async register(email: string, password: string, username: string): Promise<User> {
     try {
+      // Proactively clear any stale session before signup
+      await this.logout().catch(() => {});
+
       const newAccount = await this.account.create(
         ID.unique(),
         email,
@@ -15,8 +18,10 @@ class AuthServiceImpl extends BaseApiService {
 
       const avatarUrl = this.avatars.getInitials(username).toString();
 
+      // Create session
       await this.login(email, password);
 
+      // Create user document
       const newUser = await this.databases.createDocument<Models.Document & User>(
         ENV.APPWRITE_DATABASE_ID,
         ENV.APPWRITE_USER_COLLECTION_ID,
@@ -37,8 +42,20 @@ class AuthServiceImpl extends BaseApiService {
 
   async login(email: string, password: string): Promise<Models.Session> {
     try {
+      // Check if session exists first to avoid 401/403 conflicts
+      try {
+        const session = await this.account.getSession("current");
+        if (session) return session;
+      } catch (e) {
+        // No session, proceed to login
+      }
+      
       return await this.account.createEmailPasswordSession(email, password);
-    } catch (error) {
+    } catch (error: any) {
+      // If already logged in, just return the session
+      if (error.code === 401 || error.type === "user_session_already_exists") {
+        return await this.account.getSession("current");
+      }
       return this.handleError(error);
     }
   }
@@ -58,14 +75,17 @@ class AuthServiceImpl extends BaseApiService {
 
       return userDocs.documents[0];
     } catch (error) {
-      return null; // Silent fail for session checks is often preferred
+      // Return null instead of throwing to allow public access on hybrid pages
+      return null;
     }
   }
 
   async logout(): Promise<void> {
     try {
       await this.account.deleteSession("current");
-    } catch (error) {
+    } catch (error: any) {
+      // If no session exists, logout is technically "successful"
+      if (error.code === 401) return;
       return this.handleError(error);
     }
   }

@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { videoCreateSchema } from "@/lib/validations/video";
+import { videoCreateSchema } from "@/lib/validations";
 import { Button } from "@/components/ui/button";
 import { Input as CustomInput } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FileUpload } from "@/features/create/components/file-upload";
+import { FileUpload } from "@/features/upload/components/file-upload";
 import { Navbar } from "@/components/layout/navbar";
 import { motion } from "framer-motion";
 import { 

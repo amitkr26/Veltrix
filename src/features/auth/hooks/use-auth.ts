@@ -20,37 +20,25 @@ export function useAuth() {
       let user;
       if (type === "signup") {
         user = await AuthService.register(data.email, data.password, data.username);
-        // Ensure session is fully established and readable
-        await new Promise(resolve => setTimeout(resolve, 500));
       } else {
-        try {
-            await AuthService.login(data.email, data.password);
-        } catch (err: any) {
-            // Handle "session already active" error by attempting to recover
-            // Check both general forbidden and specific Appwrite error type
-            if (err.code === 401 || err.type === "user_session_already_exists") {
-                await AuthService.logout().catch(() => {}); // Force clear
-                await AuthService.login(data.email, data.password);
-            } else {
-                throw err;
-            }
-        }
+        await AuthService.login(data.email, data.password);
         user = await AuthService.getCurrentUser();
       }
 
       if (user) {
-        // Sync to cookie for middleware visibility BEFORE routing
-        document.cookie = `auth-storage=true; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+        // Strict cookie sync for Middleware visibility
+        // We use a high-reliability identifier for the session existence
+        document.cookie = `veltrix_session=active; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+        
         setUser(user);
         
-        // Final verification delay for Vercel/Next.js middleware stability
-        setTimeout(() => {
-            router.push("/");
-            router.refresh();
-        }, 100);
+        // Wait for state to settle before routing
+        router.refresh();
+        router.push("/");
       }
     } catch (err: any) {
       setError(err.message || "Authentication failed");
+      throw err; // Re-throw to allow AuthForm to handle UI state
     } finally {
       setIsLoading(false);
     }
@@ -61,8 +49,10 @@ export function useAuth() {
     try {
       await AuthService.logout();
       useAuthStore.getState().logout();
-      // Clear cookie
-      document.cookie = "auth-storage=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      // Clear session cookie
+      document.cookie = "veltrix_session=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+      
+      router.refresh();
       router.push("/login");
     } catch (err: any) {
       setError(err.message);
