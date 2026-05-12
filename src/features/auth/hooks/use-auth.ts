@@ -20,13 +20,16 @@ export function useAuth() {
       let user;
       if (type === "signup") {
         user = await AuthService.register(data.email, data.password, data.username);
+        // Ensure session is fully established and readable
+        await new Promise(resolve => setTimeout(resolve, 500));
       } else {
         try {
             await AuthService.login(data.email, data.password);
         } catch (err: any) {
             // Handle "session already active" error by attempting to recover
-            if (err.code === 401 && err.type === "general_access_forbidden") {
-                await AuthService.logout();
+            // Check both general forbidden and specific Appwrite error type
+            if (err.code === 401 || err.type === "user_session_already_exists") {
+                await AuthService.logout().catch(() => {}); // Force clear
                 await AuthService.login(data.email, data.password);
             } else {
                 throw err;
@@ -36,10 +39,15 @@ export function useAuth() {
       }
 
       if (user) {
-        setUser(user);
-        // Sync to cookie for middleware visibility
+        // Sync to cookie for middleware visibility BEFORE routing
         document.cookie = `auth-storage=true; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
-        router.push("/");
+        setUser(user);
+        
+        // Final verification delay for Vercel/Next.js middleware stability
+        setTimeout(() => {
+            router.push("/");
+            router.refresh();
+        }, 100);
       }
     } catch (err: any) {
       setError(err.message || "Authentication failed");
