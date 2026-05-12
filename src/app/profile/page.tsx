@@ -1,9 +1,8 @@
 "use client";
 
-import { Grid, Heart, Bookmark, Edit3, BadgeCheck, Settings2, Share } from "lucide-react";
+import { Grid, Heart, Bookmark, Hash } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { ProfileHeader } from "@/features/profile/components/profile-header";
-import { VeltrixReel } from "@/features/video-feed/components/veltrix-reel";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -17,8 +16,8 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-       <div className="min-h-screen flex items-center justify-center">
-          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground animate-pulse">Establishing Identity...</p>
+       <div className="min-h-screen flex items-center justify-center bg-black">
+          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-primary animate-pulse">Synchronizing Identity...</p>
        </div>
     );
   }
@@ -31,66 +30,63 @@ export default function ProfilePage() {
   };
 
   return (
-    <main className="min-h-screen bg-background relative pb-32 px-6 pt-12 md:pt-24">
+    <main className="min-h-screen bg-background relative pb-48 pt-32 px-8">
       <Navbar />
 
-      <div className="container mx-auto max-w-6xl">
-        <div className="space-y-16">
-          {/* Identity Section */}
+      <div className="container mx-auto max-w-7xl">
+        <section className="space-y-32">
+          {/* Identity Architecture */}
           <ProfileHeader user={profileUser} />
 
-          {/* Contextual Navigation */}
+          {/* Contextual Ecosystem Navigation */}
           <Tabs defaultValue="grid" className="w-full">
-            <div className="flex items-center justify-center border-b border-border/40 sticky top-20 bg-background/80 backdrop-blur-xl z-30 -mx-6 px-6">
-                <TabsList className="bg-transparent h-auto p-0 gap-10">
-                    <TabsTrigger 
-                        value="grid" 
-                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent pb-4 px-2 font-black text-[10px] uppercase tracking-[0.2em] transition-all"
-                    >
-                        <Grid className="w-4 h-4 mr-2" /> Gallery
-                    </TabsTrigger>
-                    <TabsTrigger 
-                        value="reels" 
-                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent pb-4 px-2 font-black text-[10px] uppercase tracking-[0.2em] transition-all"
-                    >
-                        <Heart className="w-4 h-4 mr-2" /> Liked
-                    </TabsTrigger>
-                    <TabsTrigger 
-                        value="saved" 
-                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent pb-4 px-2 font-black text-[10px] uppercase tracking-[0.2em] transition-all"
-                    >
-                        <Bookmark className="w-4 h-4 mr-2" /> Vault
-                    </TabsTrigger>
+            <div className="flex items-center justify-start border-b border-white/5 sticky top-28 bg-background/80 backdrop-blur-2xl z-30 -mx-8 px-8">
+                <TabsList className="bg-transparent h-auto p-0 gap-12">
+                    {["grid", "reels", "saved"].map((tab) => (
+                        <TabsTrigger 
+                            key={tab}
+                            value={tab} 
+                            className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent pb-6 pt-2 px-0 font-black text-[10px] uppercase tracking-[0.3em] transition-all"
+                        >
+                            {tab === "grid" && <Grid className="w-4 h-4 mr-3" />}
+                            {tab === "reels" && <Heart className="w-4 h-4 mr-3" />}
+                            {tab === "saved" && <Bookmark className="w-4 h-4 mr-3" />}
+                            {tab === "grid" ? "Cinematics" : tab === "reels" ? "Signals" : "Vault"}
+                        </TabsTrigger>
+                    ))}
                 </TabsList>
             </div>
 
-            <TabsContent value="grid" className="mt-12">
-                <div className="min-h-[300px]">
+            <TabsContent value="grid" className="mt-20">
+                <div className="min-h-[600px]">
                     {isLoading ? (
-                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="aspect-[9/16] rounded-2xl bg-white/5" />)}
+                       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                          {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="aspect-[9/16] rounded-3xl bg-white/5" />)}
                        </div>
                     ) : (
-                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                            {videos?.map((video) => (
                                <div 
                                  key={video.$id} 
                                  className={cn(
-                                   "relative aspect-[9/16] rounded-2xl overflow-hidden bg-muted group cursor-pointer",
-                                   "transition-all duration-500 hover:brightness-110 active:scale-95"
+                                   "relative aspect-[9/16] rounded-3xl overflow-hidden bg-card cursor-pointer obsidian-surface",
+                                   "transition-all duration-700 hover:scale-[1.02] tactile-press group"
                                  )}
                                >
                                  <Image 
                                    src={video.thumbnail} 
                                    alt={video.title} 
                                    fill 
-                                   className="object-cover" 
+                                   className="object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000" 
                                  />
-                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                 <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                                    <div className="flex items-center gap-2">
-                                       <Heart className="w-4 h-4 text-white fill-white" />
-                                       <span className="text-xs font-bold text-white">0</span>
+                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                 <div className="absolute bottom-6 left-6 right-6 opacity-0 group-hover:opacity-100 transition-all translate-y-4 group-hover:translate-y-0 duration-500">
+                                    <div className="space-y-2">
+                                       <p className="text-[10px] font-black text-white uppercase tracking-[0.2em]">{video.title}</p>
+                                       <div className="flex items-center gap-3">
+                                          <Heart className="w-4 h-4 text-white fill-white" />
+                                          <span className="text-[10px] font-black text-white uppercase tracking-widest">Signal Locked</span>
+                                       </div>
                                     </div>
                                  </div>
                                </div>
@@ -100,31 +96,34 @@ export default function ProfilePage() {
                 </div>
             </TabsContent>
             
-            <TabsContent value="reels" className="mt-12">
-                <div className="flex flex-col items-center justify-center py-32 text-center space-y-6">
-                    <div className="w-20 h-20 rounded-full glass flex items-center justify-center">
-                        <Heart className="w-8 h-8 text-muted-foreground/30" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-xl font-black tracking-tight">Curation Empty</p>
-                      <p className="text-muted-foreground font-medium">Videos you love will appear in your private gallery.</p>
+            <TabsContent value="reels" className="mt-32">
+                <div className="flex flex-col items-center justify-center py-48 text-center space-y-8 opacity-20">
+                    <Heart className="w-16 h-16" />
+                    <div className="space-y-2">
+                      <p className="text-[12px] font-black uppercase tracking-[0.5em]">Signals Inactive</p>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] max-w-[200px] leading-relaxed">External signal nodes will appear here once authorized.</p>
                     </div>
                 </div>
             </TabsContent>
 
-            <TabsContent value="saved" className="mt-12">
-                <div className="flex flex-col items-center justify-center py-32 text-center space-y-6">
-                    <div className="w-20 h-20 rounded-full glass flex items-center justify-center">
-                        <Bookmark className="w-8 h-8 text-muted-foreground/30" />
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-xl font-black tracking-tight">The Vault is Sealed</p>
-                      <p className="text-muted-foreground font-medium">Save inspiration here to build your creative reference.</p>
+            <TabsContent value="saved" className="mt-32">
+                <div className="flex flex-col items-center justify-center py-48 text-center space-y-8 opacity-20">
+                    <Bookmark className="w-16 h-16" />
+                    <div className="space-y-2">
+                      <p className="text-[12px] font-black uppercase tracking-[0.5em]">Vault Sealed</p>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] max-w-[200px] leading-relaxed">Reference materials and inspirations are currently offline.</p>
                     </div>
                 </div>
             </TabsContent>
           </Tabs>
-        </div>
+
+          <footer className="mt-48 pt-24 border-t border-white/5 pb-48 opacity-20">
+             <div className="flex flex-col items-center gap-6">
+                <Hash className="w-12 h-12" />
+                <span className="text-[10px] font-black uppercase tracking-[1em]">Veltrix Archive 0.1</span>
+             </div>
+          </footer>
+        </section>
       </div>
     </main>
   );

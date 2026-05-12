@@ -65,7 +65,7 @@ export function VeltrixReel({ video, priority = false }: VeltrixReelProps) {
   return (
     <div
       ref={elementRef as any}
-      className="relative w-full aspect-[9/16] md:max-w-[400px] mx-auto rounded-[2.5rem] overflow-hidden bg-black shadow-2xl group transition-all duration-700"
+      className="relative w-full aspect-[9/16] md:max-w-[420px] mx-auto rounded-[1.5rem] overflow-hidden bg-black shadow-[0_20px_60px_rgba(0,0,0,0.8)] group transition-all duration-700 cinematic-hover"
     >
       {/* Interaction Surface */}
       <div className="absolute inset-0 z-10" onClick={handleInteraction} />
@@ -121,76 +121,64 @@ export function VeltrixReel({ video, priority = false }: VeltrixReelProps) {
       </AnimatePresence>
 
       {/* Status Bar */}
-      <div className="absolute top-6 left-6 right-6 z-20 flex items-center justify-between pointer-events-none">
-         <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/80">Live Now</span>
+      <div className="absolute top-8 left-8 right-8 z-20 flex items-center justify-between pointer-events-none">
+         <div className="flex items-center gap-2.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-[pulse_2s_infinite]" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/90">Signal Active</span>
          </div>
-         <div className="glass px-3 py-1.5 rounded-full flex items-center gap-2 pointer-events-auto">
-            {isMuted ? <VolumeX className="w-4 h-4 text-white" /> : <Volume2 className="w-4 h-4 text-white" />}
+         <div className="glass px-3 py-1.5 rounded-full flex items-center gap-2 pointer-events-auto tactile-press backdrop-blur-md border-white/5">
+            {isMuted ? <VolumeX className="w-3.5 h-3.5 text-white" /> : <Volume2 className="w-3.5 h-3.5 text-white" />}
          </div>
       </div>
 
-      {/* Engagement Sidebar (Psychologically Positioned) */}
-      <div className="absolute right-4 bottom-24 z-20 flex flex-col gap-6 items-center">
-        <div className="flex flex-col items-center gap-1 group">
-            <Avatar className="w-12 h-12 border-2 border-white tap-active cursor-pointer">
-                <AvatarImage src={creator.avatar} />
-                <AvatarFallback><User /></AvatarFallback>
+      {/* Engagement Rail (Minimalist Stack) */}
+      <div className="absolute right-6 bottom-32 z-20 flex flex-col gap-8 items-center">
+        <div className="relative group cursor-pointer tactile-press">
+            <Avatar className="w-14 h-14 border-[1.5px] border-white/20 p-0.5 bg-black">
+                <AvatarImage src={creator.avatar} className="rounded-full" />
+                <AvatarFallback className="bg-black text-white"><User className="w-6 h-6" /></AvatarFallback>
             </Avatar>
-            <div className="absolute -bottom-1 bg-primary text-primary-foreground rounded-full p-0.5">
-                <Plus className="w-3 h-3" />
+            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white text-black rounded-full p-0.5 shadow-xl">
+                <Plus className="w-3 h-3 stroke-[4]" />
             </div>
         </div>
 
         <EngagementButton
-          icon={<Heart className={cn("w-7 h-7 transition-all", isLiked ? "text-red-500 fill-red-500 scale-110" : "text-white")} />}
+          icon={<Heart className={cn("w-6 h-6 transition-all duration-500", isLiked ? "text-red-500 fill-red-500 scale-125" : "text-white")} />}
           count={formatCount(video.likesCount || 0)}
           onClick={(e) => { e.stopPropagation(); handleLike(); }}
         />
         <EngagementButton
-          icon={<MessageCircle className="w-7 h-7 text-white" />}
+          icon={<MessageCircle className="w-6 h-6 text-white" />}
           count={formatCount(video.commentsCount || 0)}
           onClick={(e) => { e.stopPropagation(); setIsCommentsOpen(true); }}
         />
         <EngagementButton
-          icon={<Repeat2 className="w-7 h-7 text-white" />}
-          count="124"
+          icon={<Share2 className="w-6 h-6 text-white" />}
           onClick={(e) => { e.stopPropagation(); }}
         />
-        <EngagementButton
-          icon={<Share2 className="w-7 h-7 text-white" />}
-          onClick={(e) => { e.stopPropagation(); }}
-        />
-        <button className="tap-active p-2">
-            <MoreVertical className="w-6 h-6 text-white/50" />
-        </button>
       </div>
 
-      {/* Bottom Identity Panel */}
-      <div className="absolute bottom-8 left-6 right-20 z-20 space-y-4 pointer-events-none">
-        <div className="space-y-1">
-            <div className="flex items-center gap-2">
-                <span className="text-base font-black text-white tracking-tight leading-none">
+      {/* Bottom Editorial Identity */}
+      <div className="absolute bottom-10 left-8 right-24 z-20 space-y-6 pointer-events-none">
+        <div className="space-y-3">
+            <div className="flex items-center gap-2.5">
+                <span className="text-lg font-black text-white tracking-tighter leading-none">
                     {creator.username}
                 </span>
                 {creator.isVerified && (
-                    <BadgeCheck className="w-4 h-4 text-blue-400 fill-blue-400/20" />
+                    <BadgeCheck className="w-4.5 h-4.5 text-white fill-white/10" />
                 )}
             </div>
-            <p className="text-white/90 text-sm font-medium leading-relaxed tracking-tight line-clamp-2">
+            <p className="text-white/90 text-[15px] font-medium leading-[1.4] tracking-tight line-clamp-3 md:line-clamp-2">
                 {video.title}
             </p>
         </div>
         
-        <div className="flex items-center gap-3">
-           <div className="glass px-3 py-1.5 rounded-lg flex items-center gap-2">
-             <span className="text-[10px] font-black text-white uppercase tracking-widest">Original Audio</span>
-           </div>
-           <div className="flex -space-x-2">
-              {[1,2,3].map(i => (
-                 <div key={i} className="w-5 h-5 rounded-full border border-black bg-white/20" />
-              ))}
+        <div className="flex items-center gap-4">
+           <div className="backdrop-blur-xl bg-white/10 px-4 py-2 rounded-full flex items-center gap-2.5 border border-white/5">
+             <div className="w-1 h-1 rounded-full bg-white animate-pulse" />
+             <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Cinematic Sequence</span>
            </div>
         </div>
       </div>
@@ -229,12 +217,12 @@ function Plus({ className }: { className?: string }) {
 
 function EngagementButton({ icon, count, onClick }: { icon: React.ReactNode; count?: string; onClick?: (e: React.MouseEvent) => void; }) {
   return (
-    <button onClick={onClick} className="flex flex-col items-center gap-1.5 tap-active pointer-events-auto">
-      <div className="w-14 h-14 rounded-full glass flex items-center justify-center border-white/10 shadow-xl">
+    <button onClick={onClick} className="flex flex-col items-center gap-2.5 tactile-press pointer-events-auto">
+      <div className="w-12 h-12 rounded-full flex items-center justify-center transition-colors">
         {icon}
       </div>
       {count && (
-        <span className="text-xs font-black text-white drop-shadow-lg tracking-tight">
+        <span className="text-[10px] font-black text-white/90 tracking-widest uppercase">
           {count}
         </span>
       )}
