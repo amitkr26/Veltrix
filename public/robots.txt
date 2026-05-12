@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /studio/
+Disallow: /create/
+Disallow: /profile/
+
+Sitemap: https://veltrix.com/sitemap.xml
