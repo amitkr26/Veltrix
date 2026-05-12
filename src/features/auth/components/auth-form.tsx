@@ -92,6 +92,7 @@ export function AuthForm({ type }: AuthFormProps) {
             <Input 
               {...register("email")}
               type="email"
+              autoComplete="email"
               placeholder="name@ecosystem.com" 
               className={cn(
                 "h-12 bg-white/5 border-white/10 rounded-xl",
@@ -107,6 +108,7 @@ export function AuthForm({ type }: AuthFormProps) {
             <Input 
               {...register("password")}
               type="password"
+              autoComplete={type === "login" ? "current-password" : "new-password"}
               placeholder="••••••••" 
               className={cn(
                 "h-12 bg-white/5 border-white/10 rounded-xl",
