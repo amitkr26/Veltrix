@@ -36,56 +36,53 @@
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.05 0 0);
-  --card: oklch(0.98 0 0);
+  --card: oklch(0.99 0 0);
   --card-foreground: oklch(0.05 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.05 0 0);
   --primary: oklch(0.1 0 0);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.96 0 0);
+  --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.1 0 0);
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.4 0 0);
-  --accent: oklch(0.96 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.1 0 0);
   --destructive: oklch(0.45 0.18 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.92 0 0);
-  --input: oklch(0.92 0 0);
+  --border: oklch(0.94 0 0);
+  --input: oklch(0.94 0 0);
   --ring: oklch(0.1 0 0);
-  --radius: 0.5rem; 
+  --radius: 0.75rem; 
 }
 
 .dark {
-  /* Obsidian Core Palette */
-  --background: oklch(0.02 0 0);
+  --background: oklch(0.03 0 0);
   --foreground: oklch(0.98 0 0);
   
-  /* Graphite Layering */
-  --card: oklch(0.06 0 0);
+  --card: oklch(0.07 0 0);
   --card-foreground: oklch(0.98 0 0);
   
-  --popover: oklch(0.04 0 0);
+  --popover: oklch(0.05 0 0);
   --popover-foreground: oklch(0.98 0 0);
   
-  /* Muted Chrome Accents */
   --primary: oklch(0.98 0 0);
-  --primary-foreground: oklch(0.02 0 0);
+  --primary-foreground: oklch(0.03 0 0);
   
-  --secondary: oklch(0.1 0 0);
+  --secondary: oklch(0.12 0 0);
   --secondary-foreground: oklch(0.98 0 0);
   
-  --muted: oklch(0.08 0 0);
-  --muted-foreground: oklch(0.55 0 0);
+  --muted: oklch(0.1 0 0);
+  --muted-foreground: oklch(0.65 0 0); /* Improved readability */
   
-  --accent: oklch(0.1 0 0);
+  --accent: oklch(0.12 0 0);
   --accent-foreground: oklch(0.98 0 0);
   
   --destructive: oklch(0.35 0.12 25);
   --destructive-foreground: oklch(0.98 0 0);
   
-  --border: oklch(0.12 0 0);
-  --input: oklch(0.12 0 0);
+  --border: oklch(0.14 0 0);
+  --input: oklch(0.14 0 0);
   --ring: oklch(0.7 0 0);
 }
 
@@ -96,43 +93,54 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-feature-settings: "ss01", "ss02", "cv01", "cv11", "tnum";
+    font-feature-settings: "ss01", "ss02", "cv01", "cv11", "tnum", "case";
     scroll-behavior: smooth;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     letter-spacing: -0.01em;
+    line-height: 1.5;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
     font-weight: 800;
+    line-height: 1.1;
   }
 }
 
 @layer utilities {
-  /* Editorial Spacing */
+  /* Practical Spacing */
   .section-rhythm {
-    @apply py-24 md:py-32;
+    @apply py-16 md:py-24;
   }
   
-  /* Obsidian Spatial Hierarchy */
+  /* Grounded Spatial Hierarchy */
   .obsidian-surface {
-    @apply bg-card border border-border/50 shadow-[0_1px_1px_rgba(0,0,0,0.5),0_8px_16px_rgba(0,0,0,0.5)] transition-all duration-300;
+    @apply bg-card border border-border/60 shadow-sm transition-all duration-300;
+  }
+
+  .obsidian-glow {
+    @apply relative after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[0_0_20px_rgba(var(--primary-rgb),0.1)] after:opacity-0 hover:after:opacity-100 transition-all;
   }
 
   .chrome-blur {
-    @apply backdrop-blur-xl bg-background/40 border-b border-white/[0.04];
+    @apply backdrop-blur-2xl bg-background/80 border border-white/[0.05] shadow-2xl;
   }
 
-  /* Cinematic Interactions */
-  .cinematic-hover {
-    @apply hover:scale-[1.01] hover:shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)];
+  /* Snappy Interactions */
+  .snappy-hover {
+    @apply hover:scale-[1.01] hover:shadow-xl transition-all duration-300 ease-out;
   }
 
   .tactile-press {
-    @apply active:scale-[0.97] transition-transform duration-200;
+    @apply active:scale-[0.96] transition-transform duration-150 ease-out;
   }
   
+  /* Ergonomic Touch Targets */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer;
+  }
+
   .hide-scrollbar {
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -141,16 +149,21 @@
     display: none;
   }
 
-  /* Editorial Layout Tokens */
-  .asymmetric-grid {
-    @apply grid grid-cols-1 md:grid-cols-12 gap-8;
+  /* Balanced Layout Tokens */
+  .content-grid {
+    @apply grid grid-cols-1 md:grid-cols-12 gap-6;
   }
 
-  .col-editorial-main {
+  .col-main {
     @apply md:col-span-8;
   }
 
-  .col-editorial-side {
+  .col-side {
     @apply md:col-span-4;
+  }
+
+  /* Readability Enhancements */
+  .reading-pane {
+    @apply max-w-2xl leading-relaxed text-muted-foreground font-medium tracking-tight;
   }
 }

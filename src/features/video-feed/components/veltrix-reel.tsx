@@ -65,10 +65,10 @@ export function VeltrixReel({ video, priority = false }: VeltrixReelProps) {
   return (
     <div
       ref={elementRef as any}
-      className="relative w-full aspect-[9/16] md:max-w-[420px] mx-auto rounded-[1.5rem] overflow-hidden bg-black shadow-[0_20px_60px_rgba(0,0,0,0.8)] group transition-all duration-700 cinematic-hover"
+      className="relative w-full aspect-[9/16] md:max-w-[420px] mx-auto rounded-3xl overflow-hidden bg-black shadow-xl group transition-all duration-500 snappy-hover border border-white/5 obsidian-glow"
     >
       {/* Interaction Surface */}
-      <div className="absolute inset-0 z-10" onClick={handleInteraction} />
+      <div className="absolute inset-0 z-10 cursor-pointer" onClick={handleInteraction} />
 
       {/* Media Layer */}
       <div className="absolute inset-0 z-0">
@@ -76,7 +76,7 @@ export function VeltrixReel({ video, priority = false }: VeltrixReelProps) {
           src={mediaError ? "/fallback-poster.jpg" : video.thumbnail}
           alt={video.title}
           fill
-          sizes="(max-width: 400px) 100vw, 400px"
+          sizes="(max-width: 420px) 100vw, 420px"
           priority={priority}
           onError={() => setMediaError(true)}
           className={cn(
@@ -95,112 +95,106 @@ export function VeltrixReel({ video, priority = false }: VeltrixReelProps) {
             onError={() => setMediaError(true)}
           />
         )}
-        
-        {mediaError && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-muted/20 p-8 text-center space-y-4">
-             <AlertCircle className="w-10 h-10 text-muted-foreground/50" />
-             <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">Media Sector Unreachable</p>
-          </div>
-        )}
       </div>
 
+      {/* Refined Overlays - Tighter gradients for better visibility */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none z-10" />
 
       {/* Engagement Feedback */}
       <AnimatePresence>
         {showHeartOverlay && (
           <motion.div
-            initial={{ scale: 0, opacity: 0, rotate: -15 }}
-            animate={{ scale: 1.2, opacity: 1, rotate: 0 }}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1.2, opacity: 1 }}
             exit={{ scale: 2, opacity: 0 }}
             className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none"
           >
-            <Heart className="w-32 h-32 text-white fill-white drop-shadow-[0_0_30px_rgba(255,255,255,0.4)]" />
+            <Heart className="w-24 h-24 text-white fill-white drop-shadow-2xl" />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Status Bar */}
-      <div className="absolute top-8 left-8 right-8 z-20 flex items-center justify-between pointer-events-none">
-         <div className="flex items-center gap-2.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-[pulse_2s_infinite]" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/90">Signal Active</span>
+      {/* Practical Status Bar - Standardized Node nomenclature */}
+      <div className="absolute top-6 left-6 right-6 z-20 flex items-center justify-between pointer-events-none">
+         <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.6)] animate-pulse" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white drop-shadow-md">Live</span>
          </div>
-         <div className="glass px-3 py-1.5 rounded-full flex items-center gap-2 pointer-events-auto tactile-press backdrop-blur-md border-white/5">
+         <div className="backdrop-blur-xl bg-black/40 px-3 py-2 rounded-full flex items-center gap-2 pointer-events-auto tactile-press border border-white/10 shadow-lg">
             {isMuted ? <VolumeX className="w-3.5 h-3.5 text-white" /> : <Volume2 className="w-3.5 h-3.5 text-white" />}
          </div>
       </div>
 
-      {/* Engagement Rail (Minimalist Stack) */}
-      <div className="absolute right-6 bottom-32 z-20 flex flex-col gap-8 items-center">
-        <div className="relative group cursor-pointer tactile-press">
-            <Avatar className="w-14 h-14 border-[1.5px] border-white/20 p-0.5 bg-black">
+      {/* Ergonomic Engagement Rail */}
+      <div className="absolute right-4 bottom-24 z-20 flex flex-col gap-6 items-center">
+        <div className="relative group cursor-pointer tactile-press mb-2">
+            <Avatar className="w-12 h-12 border-2 border-white/20 p-0.5 bg-black shadow-2xl">
                 <AvatarImage src={creator.avatar} className="rounded-full" />
-                <AvatarFallback className="bg-black text-white"><User className="w-6 h-6" /></AvatarFallback>
+                <AvatarFallback className="bg-muted text-white text-xs">{creator.username[0]}</AvatarFallback>
             </Avatar>
-            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white text-black rounded-full p-0.5 shadow-xl">
-                <Plus className="w-3 h-3 stroke-[4]" />
+            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white text-black rounded-full p-0.5 shadow-lg scale-90 group-hover:scale-100 transition-transform">
+                <Plus className="w-2.5 h-2.5 stroke-[4]" />
             </div>
         </div>
 
         <EngagementButton
-          icon={<Heart className={cn("w-6 h-6 transition-all duration-500", isLiked ? "text-red-500 fill-red-500 scale-125" : "text-white")} />}
+          icon={<Heart className={cn("w-6 h-6 transition-all duration-300", isLiked ? "text-red-500 fill-red-500 scale-110" : "text-white drop-shadow-md")} />}
           count={formatCount(video.likesCount || 0)}
           onClick={(e) => { e.stopPropagation(); handleLike(); }}
         />
         <EngagementButton
-          icon={<MessageCircle className="w-6 h-6 text-white" />}
+          icon={<MessageCircle className="w-6 h-6 text-white drop-shadow-md" />}
           count={formatCount(video.commentsCount || 0)}
           onClick={(e) => { e.stopPropagation(); setIsCommentsOpen(true); }}
         />
         <EngagementButton
-          icon={<Share2 className="w-6 h-6 text-white" />}
+          icon={<Share2 className="w-6 h-6 text-white drop-shadow-md" />}
           onClick={(e) => { e.stopPropagation(); }}
         />
       </div>
 
-      {/* Bottom Editorial Identity */}
-      <div className="absolute bottom-10 left-8 right-24 z-20 space-y-6 pointer-events-none">
-        <div className="space-y-3">
-            <div className="flex items-center gap-2.5">
-                <span className="text-lg font-black text-white tracking-tighter leading-none">
-                    {creator.username}
+      {/* High-Contrast Identity Pane */}
+      <div className="absolute bottom-8 left-6 right-20 z-20 space-y-3 pointer-events-none">
+        <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+                <span className="text-base font-bold text-white tracking-tight drop-shadow-lg">
+                    @{creator.username.toLowerCase()}
                 </span>
                 {creator.isVerified && (
-                    <BadgeCheck className="w-4.5 h-4.5 text-white fill-white/10" />
+                    <BadgeCheck className="w-4 h-4 text-white fill-white/20" />
                 )}
             </div>
-            <p className="text-white/90 text-[15px] font-medium leading-[1.4] tracking-tight line-clamp-3 md:line-clamp-2">
+            <p className="text-white/95 text-[13px] font-medium leading-relaxed tracking-tight line-clamp-2 drop-shadow-lg">
                 {video.title}
             </p>
         </div>
         
-        <div className="flex items-center gap-4">
-           <div className="backdrop-blur-xl bg-white/10 px-4 py-2 rounded-full flex items-center gap-2.5 border border-white/5">
-             <div className="w-1 h-1 rounded-full bg-white animate-pulse" />
-             <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Cinematic Sequence</span>
+        <div className="flex items-center gap-3">
+           <div className="backdrop-blur-xl bg-white/10 px-3 py-1.5 rounded-full flex items-center gap-2 border border-white/10 shadow-lg">
+             <div className="w-1 h-1 rounded-full bg-white/80 animate-pulse" />
+             <span className="text-[9px] font-bold text-white uppercase tracking-widest">Ecosystem Signal</span>
            </div>
         </div>
       </div>
 
-      {/* Side Sheets (Comments) */}
+      {/* Refined Side Sheets */}
       <AnimatePresence>
         {isCommentsOpen && (
           <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="absolute inset-0 z-40"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="absolute inset-0 z-40 bg-card/95 backdrop-blur-xl"
           >
-            <div className="absolute top-6 left-6 z-50">
+            <div className="absolute top-6 right-6 z-50">
                <Button 
                 variant="ghost" 
                 size="icon" 
-                className="rounded-full glass"
+                className="rounded-full bg-white/5 hover:bg-white/10"
                 onClick={() => setIsCommentsOpen(false)}
                >
-                 <X className="w-5 h-5 text-white" />
+                 <X className="w-5 h-5" />
                </Button>
             </div>
             <CommentSheet videoId={video.$id} />
@@ -217,12 +211,12 @@ function Plus({ className }: { className?: string }) {
 
 function EngagementButton({ icon, count, onClick }: { icon: React.ReactNode; count?: string; onClick?: (e: React.MouseEvent) => void; }) {
   return (
-    <button onClick={onClick} className="flex flex-col items-center gap-2.5 tactile-press pointer-events-auto">
-      <div className="w-12 h-12 rounded-full flex items-center justify-center transition-colors">
+    <button onClick={onClick} className="flex flex-col items-center gap-1 tactile-press pointer-events-auto group">
+      <div className="w-10 h-10 flex items-center justify-center transition-transform group-hover:scale-110">
         {icon}
       </div>
       {count && (
-        <span className="text-[10px] font-black text-white/90 tracking-widest uppercase">
+        <span className="text-[10px] font-bold text-white/90 tracking-tighter drop-shadow-sm">
           {count}
         </span>
       )}

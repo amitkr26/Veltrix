@@ -52,19 +52,19 @@ export function AuthForm({ type }: AuthFormProps) {
     <div className="w-full max-w-lg space-y-12 p-8 md:p-12">
       <div className="space-y-6">
         <div className="flex items-center gap-4">
-           <div className="p-3 rounded-2xl bg-white/5 border border-white/10">
-              <ShieldCheck className="w-6 h-6 text-white" />
+           <div className="p-3 rounded-2xl bg-card border border-border shadow-sm">
+              <ShieldCheck className="w-6 h-6 text-primary" />
            </div>
-           <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground">Protocol Secure</span>
+           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground">Protocol Secure</span>
         </div>
-        <div className="space-y-2">
-            <h1 className="text-5xl md:text-6xl font-black tracking-tighter uppercase leading-[0.9]">
+        <div className="space-y-3">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight uppercase leading-[0.9]">
               {type === "login" ? "Authorize" : "Initialize"}<br/>
               <span className="text-muted-foreground/30">{type === "login" ? "Session" : "Identity"}</span>
             </h1>
-            <p className="text-muted-foreground/60 font-medium text-sm tracking-tight max-w-sm">
+            <p className="reading-pane text-sm">
               {type === "login" 
-                ? "Reconnect with the Veltrix signal nodes and synchronize your creator profile." 
+                ? "Reconnect with the Veltrix network and synchronize your creator node." 
                 : "Establish your unique identifier within the cinematic ecosystem."}
             </p>
         </div>
@@ -74,64 +74,64 @@ export function AuthForm({ type }: AuthFormProps) {
         <div className="space-y-6">
           {type === "signup" && (
             <div className="space-y-3">
-              <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Creator Handle</Label>
+              <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground">Creator Handle</Label>
               <Input 
                 {...register("username")}
                 placeholder="handle_name" 
                 className={cn(
-                    "h-14 bg-white/[0.03] border-white/5 rounded-2xl px-6 focus-visible:ring-primary/20 transition-all placeholder:opacity-30",
-                    errors.username && touchedFields.username && "border-red-500/50"
+                    "h-14 bg-card border-border rounded-2xl px-6 focus-visible:ring-primary/20 transition-all placeholder:opacity-30",
+                    errors.username && touchedFields.username && "border-destructive/50"
                 )}
                 disabled={isSubmitting || isLocked}
               />
-              {errors.username && touchedFields.username && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.username.message as string}</p>}
+              {errors.username && touchedFields.username && <p className="text-[10px] font-bold text-destructive uppercase tracking-widest">{errors.username.message as string}</p>}
             </div>
           )}
           
           <div className="space-y-3">
-            <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Electronic Mail</Label>
+            <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground">Electronic Mail</Label>
             <Input 
               {...register("email")}
               type="email"
               autoComplete="email"
               placeholder="name@veltrix.studio" 
               className={cn(
-                "h-14 bg-white/[0.03] border-white/5 rounded-2xl px-6 focus-visible:ring-primary/20 transition-all placeholder:opacity-30",
-                errors.email && touchedFields.email && "border-red-500/50"
+                "h-14 bg-card border-border rounded-2xl px-6 focus-visible:ring-primary/20 transition-all placeholder:opacity-30",
+                errors.email && touchedFields.email && "border-destructive/50"
               )}
               disabled={isSubmitting || isLocked}
             />
-            {errors.email && touchedFields.email && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.email.message as string}</p>}
+            {errors.email && touchedFields.email && <p className="text-[10px] font-bold text-destructive uppercase tracking-widest">{errors.email.message as string}</p>}
           </div>
           
           <div className="space-y-3">
-            <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Security Phrase</Label>
+            <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground">Security Phrase</Label>
             <Input 
               {...register("password")}
               type="password"
               autoComplete={type === "login" ? "current-password" : "new-password"}
               placeholder="••••••••" 
               className={cn(
-                "h-14 bg-white/[0.03] border-white/5 rounded-2xl px-6 focus-visible:ring-primary/20 transition-all placeholder:opacity-30",
-                errors.password && touchedFields.password && "border-red-500/50"
+                "h-14 bg-card border-border rounded-2xl px-6 focus-visible:ring-primary/20 transition-all placeholder:opacity-30",
+                errors.password && touchedFields.password && "border-destructive/50"
               )}
               disabled={isSubmitting || isLocked}
             />
-            {errors.password && touchedFields.password && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.password.message as string}</p>}
+            {errors.password && touchedFields.password && <p className="text-[10px] font-bold text-destructive uppercase tracking-widest">{errors.password.message as string}</p>}
           </div>
         </div>
 
         {serverError && (
-          <div className="p-5 rounded-2xl bg-red-500/5 border border-red-500/10 flex items-start gap-4 animate-in fade-in slide-in-from-top-1">
-             <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-             <p className="text-[11px] font-bold text-red-500 leading-relaxed uppercase tracking-widest">{serverError}</p>
+          <div className="p-5 rounded-2xl bg-destructive/5 border border-destructive/10 flex items-start gap-4 animate-in fade-in slide-in-from-top-1">
+             <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0" />
+             <p className="text-[11px] font-bold text-destructive leading-relaxed uppercase tracking-widest">{serverError}</p>
           </div>
         )}
 
-        <div className="space-y-6">
+        <div className="space-y-6 pt-4">
           <Button 
             type="submit" 
-            className="w-full h-16 rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-2xl transition-all tactile-press bg-white text-black hover:bg-white/90"
+            className="w-full h-16 rounded-2xl font-bold text-[11px] uppercase tracking-[0.2em] shadow-lg transition-all tactile-press"
             disabled={isSubmitting || isLocked}
           >
             {isSubmitting ? (
@@ -141,11 +141,11 @@ export function AuthForm({ type }: AuthFormProps) {
             )}
           </Button>
 
-          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-[0.2em] text-center">
-            {type === "login" ? "New to the ecosystem?" : "Existing identity?"}
+          <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-[0.1em] text-center">
+            {type === "login" ? "New to the network?" : "Existing identity?"}
             <Link 
               href={type === "login" ? "/signup" : "/login"} 
-              className="ml-3 text-foreground hover:underline decoration-white/20 decoration-2 underline-offset-4"
+              className="ml-3 text-foreground hover:underline decoration-primary decoration-2 underline-offset-4"
             >
               {type === "login" ? "Establish Now" : "Authorize Now"}
             </Link>

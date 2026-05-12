@@ -3,14 +3,21 @@
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { videoCreateSchema } from "@/lib/validations";
-import { motion } from "framer-motion";
-import { Zap, Send, Wand2, ShieldAlert, Loader2, Hash } from "lucide-react";
-import { Navbar } from "@/components/layout/navbar";
-import { FileUpload } from "@/features/upload/components/file-upload";
-import { Input as CustomInput } from "@/components/ui/input";
+import { videoCreateSchema } from "@/lib/validations/video";
 import { Button } from "@/components/ui/button";
+import { Input as CustomInput } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FileUpload } from "@/features/create/components/file-upload";
+import { Navbar } from "@/components/layout/navbar";
+import { motion } from "framer-motion";
+import { 
+  Loader2, 
+  Send, 
+  ShieldAlert, 
+  Zap, 
+  Wand2,
+  Hash
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function CreatePage() {
@@ -42,63 +49,63 @@ export default function CreatePage() {
   };
 
   return (
-    <main className="min-h-screen bg-background relative pt-32 pb-48 px-8">
+    <main className="min-h-screen bg-background pb-32">
       <Navbar />
 
-      <div className="container mx-auto max-w-4xl">
+      <div className="container mx-auto max-w-5xl pt-24 px-6 md:pt-32">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
-          className="space-y-24"
+          transition={{ duration: 0.6 }}
+          className="space-y-20"
         >
-          <header className="asymmetric-grid items-end gap-16">
-            <div className="col-editorial-main space-y-8">
+          <header className="flex flex-col md:flex-row md:items-end justify-between gap-12">
+            <div className="space-y-6 max-w-2xl">
                <div className="flex items-center gap-3">
-                  <div className="w-12 h-[1px] bg-primary" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Content Protocol</span>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Ingestion Protocol</span>
+                  <div className="w-12 h-[1px] bg-primary/20" />
                </div>
-               <h1 className="text-7xl md:text-9xl font-black tracking-tighter uppercase leading-[0.8]">
-                 Media<br/><span className="text-muted-foreground/20">Ingestion</span>
+               <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight leading-[0.9] uppercase">
+                 Studio<br/><span className="text-muted-foreground/30">Command</span>
                </h1>
-               <p className="text-muted-foreground/60 font-medium text-xl max-w-xl leading-relaxed tracking-tight">
-                 Synchronizing your cinematic output with the Veltrix global signal network.
+               <p className="reading-pane text-base">
+                 Synchronizing your technical media and cinematic narratives with the Veltrix global signal network.
                </p>
             </div>
-            <div className="col-editorial-side pb-4">
-                <div className="p-6 rounded-[2rem] bg-card border border-white/5 space-y-4">
-                    <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                        <span className="text-[9px] font-black uppercase tracking-widest">Storage Node Ready</span>
+            <div className="w-full md:w-80">
+                <div className="p-6 rounded-3xl bg-card border border-border/40 space-y-3">
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest">Network Active</span>
                     </div>
-                    <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-tight">Multi-region ingestion active via NYC Cluster.</p>
+                    <p className="text-[11px] text-muted-foreground font-medium uppercase leading-tight">Multi-region signal nodes are synchronized and ready.</p>
                 </div>
             </div>
           </header>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="asymmetric-grid gap-20">
-            <div className="col-editorial-main space-y-16">
-                <div className="space-y-12">
-                    <div className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="content-grid gap-16">
+            <div className="col-main space-y-12">
+                <div className="space-y-8">
+                    <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                            <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Cinematic Title</Label>
-                            <button type="button" className="text-[9px] font-black uppercase tracking-widest text-primary gap-2 flex items-center tactile-press">
-                                <Wand2 className="w-3 h-3" /> Optimize Signal
+                            <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Cinematic Title</Label>
+                            <button type="button" className="text-[10px] font-bold uppercase tracking-widest text-primary gap-2 flex items-center tactile-press">
+                                <Wand2 className="w-3.5 h-3.5" /> Optimize
                             </button>
                         </div>
                         <CustomInput 
                             {...register("title")}
-                            placeholder="NARRATIVE_IDENTIFIER_01" 
+                            placeholder="narrative_identifier_01" 
                             className={cn(
-                                "h-16 bg-white/[0.03] border-white/5 rounded-2xl px-8 text-lg font-black tracking-tighter uppercase focus-visible:ring-primary/20 transition-all placeholder:opacity-20",
-                                errors.title && "border-red-500/30"
+                                "h-16 bg-card border-border rounded-2xl px-8 text-lg font-bold tracking-tight uppercase focus-visible:ring-primary/20 transition-all placeholder:opacity-20",
+                                errors.title && "border-destructive/30"
                             )}
                             disabled={isUploading}
                         />
-                        {errors.title && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.title.message as string}</p>}
+                        {errors.title && <p className="text-[10px] font-bold text-destructive uppercase tracking-widest">{errors.title.message as string}</p>}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <Controller 
                             name="videoUrl"
                             control={control}
@@ -126,71 +133,71 @@ export default function CreatePage() {
                         />
                     </div>
 
-                    <div className="space-y-6">
-                        <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Engineering Log / Prompt</Label>
+                    <div className="space-y-4">
+                        <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Engineering Log / Prompt</Label>
                         <textarea 
                             {...register("prompt")}
-                            placeholder="Enter the technical parameters used for this generation..." 
+                            placeholder="Enter technical specifications used for this generation..." 
                             className={cn(
-                                "w-full h-48 bg-white/[0.03] border border-white/5 rounded-[2rem] p-8 text-base font-medium focus:border-primary/50 outline-none transition-all resize-none placeholder:opacity-20",
-                                errors.prompt && "border-red-500/30"
+                                "w-full h-40 bg-card border border-border rounded-3xl p-8 text-sm font-medium focus:border-primary/50 outline-none transition-all resize-none placeholder:opacity-20",
+                                errors.prompt && "border-destructive/30"
                             )}
                             disabled={isUploading}
                         />
-                        {errors.prompt && <p className="text-[10px] font-bold text-red-500 uppercase tracking-widest">{errors.prompt.message as string}</p>}
+                        {errors.prompt && <p className="text-[10px] font-bold text-destructive uppercase tracking-widest">{errors.prompt.message as string}</p>}
                     </div>
                 </div>
 
                 {uploadError && (
-                    <div className="p-6 rounded-[2rem] bg-red-500/5 border border-red-500/10 flex items-start gap-4">
-                       <ShieldAlert className="w-6 h-6 text-red-500 flex-shrink-0" />
-                       <p className="text-[11px] font-bold text-red-500 leading-relaxed uppercase tracking-widest">{uploadError}</p>
+                    <div className="p-6 rounded-3xl bg-destructive/5 border border-destructive/10 flex items-start gap-4">
+                       <ShieldAlert className="w-5 h-5 text-destructive flex-shrink-0" />
+                       <p className="text-[11px] font-bold text-destructive leading-relaxed uppercase tracking-widest">{uploadError}</p>
                     </div>
                 )}
 
                 <Button 
                     type="submit"
-                    className="w-full h-20 rounded-[2rem] text-xl font-black uppercase tracking-[0.3em] shadow-2xl transition-all tactile-press bg-white text-black hover:bg-white/90"
+                    className="w-full h-16 rounded-3xl text-sm font-bold uppercase tracking-[0.2em] shadow-lg transition-all tactile-press"
                     disabled={isSubmitting || isUploading || !isValid}
                 >
                     {isUploading ? (
                        <div className="flex items-center gap-4">
-                           <Loader2 className="w-6 h-6 animate-spin" />
-                           <span>Synchronizing Signal...</span>
+                           <Loader2 className="w-5 h-5 animate-spin" />
+                           <span>Synchronizing...</span>
                        </div>
                     ) : (
                        <div className="flex items-center gap-4">
                            <span>Broadcast Signal</span>
-                           <Send className="w-6 h-6" />
+                           <Send className="w-5 h-5" />
                        </div>
                     )}
                 </Button>
             </div>
 
-            <aside className="col-editorial-side space-y-12">
-                <div className="p-10 rounded-[2rem] bg-card border border-white/5 space-y-8">
+            <aside className="col-side space-y-12">
+                <div className="p-8 rounded-3xl bg-card border border-border/40 space-y-8">
                     <div className="flex items-center gap-3">
                         <Hash className="w-6 h-6 text-primary" />
-                        <h3 className="text-xl font-black uppercase tracking-tighter">Guidelines</h3>
+                        <h3 className="text-xl font-extrabold tracking-tight uppercase">Protocol</h3>
                     </div>
                     <ul className="space-y-6">
                         {[
-                            "High-fidelity source only",
-                            "Strict technical metadata",
+                            "High-fidelity source (1080p+)",
+                            "Precise technical metadata",
                             "Authentic creator signature",
-                            "Safe for ecosystem signal"
+                            "Valid ecosystem signal nodes"
                         ].map(item => (
-                            <li key={item} className="flex items-center gap-4 group">
-                                <div className="w-1 h-1 rounded-full bg-primary/40 group-hover:bg-primary transition-colors" />
-                                <span className="text-[11px] font-black uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-colors">{item}</span>
+                            <li key={item} className="flex items-start gap-4 group">
+                                <div className="w-1.5 h-1.5 rounded-full bg-primary/40 mt-1.5 group-hover:bg-primary transition-colors" />
+                                <span className="text-[11px] font-bold uppercase tracking-tight text-muted-foreground group-hover:text-foreground transition-colors leading-tight">{item}</span>
                             </li>
                         ))}
                     </ul>
                 </div>
 
-                <div className="opacity-20 text-center space-y-4">
-                    <Zap className="w-10 h-10 mx-auto" />
-                    <span className="text-[9px] font-black uppercase tracking-[0.5em] block">Studio Engine 0.1</span>
+                <div className="text-center space-y-6 opacity-30 py-8 border-t border-border/20">
+                    <Zap className="w-8 h-8 mx-auto" />
+                    <span className="text-[10px] font-bold uppercase tracking-[0.4em] block">Studio Engine v0.1.2</span>
                 </div>
             </aside>
           </form>
